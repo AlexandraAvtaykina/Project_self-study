@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.generics import (
     ListAPIView, RetrieveAPIView,
     CreateAPIView, UpdateAPIView, DestroyAPIView)
+from rest_framework.permissions import IsAuthenticated
 
 from education.models import Section, Material
 from education.paginations import MyPaginator
@@ -13,6 +14,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
     queryset = Section.objects.all()
     pagination_class = MyPaginator
+    permission_classes = [IsAuthenticated]
 
     """ Функция привязывает автора к его разделу"""
     def perform_create(self, serializer):
@@ -33,6 +35,7 @@ class MaterialListAPIView(ListAPIView):
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
     pagination_class = MyPaginator
+    permission_classes = [IsAuthenticated]
 
 
 class MaterialRetrieveAPIView(RetrieveAPIView):
@@ -40,6 +43,7 @@ class MaterialRetrieveAPIView(RetrieveAPIView):
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class MaterialCreateAPIView(CreateAPIView):
@@ -47,6 +51,7 @@ class MaterialCreateAPIView(CreateAPIView):
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
+    permission_classes = [IsAuthenticated]
 
     """ Функция привязывает автора к его материалу"""
     def perform_create(self, serializer):
@@ -60,6 +65,7 @@ class MaterialUpdateAPIView(UpdateAPIView):
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class MaterialDestroyAPIView(DestroyAPIView):
@@ -67,3 +73,4 @@ class MaterialDestroyAPIView(DestroyAPIView):
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
+    permission_classes = [IsAuthenticated]
