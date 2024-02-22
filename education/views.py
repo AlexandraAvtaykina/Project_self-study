@@ -3,14 +3,17 @@ from rest_framework.generics import (
     ListAPIView, RetrieveAPIView,
     CreateAPIView, UpdateAPIView, DestroyAPIView)
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from education.models import Section, Material
+from education.models import Section, Material, Test
 from education.paginations import MyPaginator
-from education.serializers import SectionSerializer, MaterialSerializer
+from education.serializers import (SectionSerializer, MaterialSerializer,
+                                   TestSerializer)
 
 
 class SectionViewSet(viewsets.ModelViewSet):
-    """ Простой ViewSet-класс для вывода информации """
+    """ ViewSet-класс для работы с разделами """
     serializer_class = SectionSerializer
     queryset = Section.objects.all()
     pagination_class = MyPaginator
@@ -30,7 +33,7 @@ class SectionViewSet(viewsets.ModelViewSet):
 
 
 class MaterialListAPIView(ListAPIView):
-    """ Отвечает за отображение списка сущностей (Generic-класс)"""
+    """ Отвечает за отображение списка материалов"""
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
@@ -39,7 +42,7 @@ class MaterialListAPIView(ListAPIView):
 
 
 class MaterialRetrieveAPIView(RetrieveAPIView):
-    """ Отвечает за отображение одной сущности (Generic-класс)"""
+    """ Отвечает за отображение одного материала"""
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
@@ -47,7 +50,7 @@ class MaterialRetrieveAPIView(RetrieveAPIView):
 
 
 class MaterialCreateAPIView(CreateAPIView):
-    """ Отвечает за создание сущности (Generic-класс)"""
+    """ Отвечает за создание материала"""
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
@@ -61,7 +64,7 @@ class MaterialCreateAPIView(CreateAPIView):
 
 
 class MaterialUpdateAPIView(UpdateAPIView):
-    """ Отвечает за редактирование сущности (Generic-класс)"""
+    """ Отвечает за редактирование материала"""
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
@@ -69,8 +72,29 @@ class MaterialUpdateAPIView(UpdateAPIView):
 
 
 class MaterialDestroyAPIView(DestroyAPIView):
-    """ Отвечает за удаление сущности (Generic-класс)"""
+    """ Отвечает за удаление материала """
 
     serializer_class = MaterialSerializer
     queryset = Material.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+class TestViewSet(viewsets.ModelViewSet):
+    """ ViewSet-класс для работы с тестами """
+
+    serializer_class = TestSerializer
+    queryset = Test.objects.all()
+
+
+class TestAPIView(APIView):
+    """ Отвечает за ввод ответа на тест и показ правильного ответа """
+
+    def post(self, request):
+        answer_input = request.POST.get('answer_input')
+        id_test = request.POST.get('id_test')
+        test = Test.objects.get(id=id_test)
+
+        if answer_input != test.answer:
+            return Response(f'Неверно, правильный ответ - {test.answer}')
+        else:
+            return Response('Верный ответ!')

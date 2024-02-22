@@ -19,7 +19,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=35,
                                verbose_name='Страна', **NULLABLE)
 
-    is_active = models.BooleanField(default=False,
+    is_active = models.BooleanField(default=True,
                                     verbose_name='Активность')
 
     USERNAME_FIELD = "email"

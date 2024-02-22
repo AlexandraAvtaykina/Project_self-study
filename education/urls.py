@@ -3,17 +3,19 @@ from rest_framework.routers import DefaultRouter
 
 from education.apps import EducationConfig
 from education.views import (
-  SectionViewSet,
-  MaterialListAPIView,
-  MaterialRetrieveAPIView,
-  MaterialCreateAPIView,
-  MaterialUpdateAPIView,
-  MaterialDestroyAPIView)
+    SectionViewSet,
+    MaterialListAPIView,
+    MaterialRetrieveAPIView,
+    MaterialCreateAPIView,
+    MaterialUpdateAPIView,
+    MaterialDestroyAPIView,
+    TestAPIView, TestViewSet)
 
 app_name = EducationConfig.name
 
 router = DefaultRouter()
 router.register(r'section', SectionViewSet, basename='section')
+router.register(r'test', TestViewSet, basename='test')
 
 urlpatterns = [
   # Список материалов
@@ -36,4 +38,7 @@ urlpatterns = [
   path('material_destroy/<int:pk>/',
        MaterialDestroyAPIView.as_view(), name='material_destroy'),
 
-] + router.urls  # Присоединяем разделы
+  # Ввод ответа на вопрос материала
+  path('material_tests/', TestAPIView.as_view(), name='material_tests'),
+
+] + router.urls  # Присоединяем разделы и тесты
