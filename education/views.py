@@ -84,10 +84,12 @@ class TestViewSet(viewsets.ModelViewSet):
 
     serializer_class = TestSerializer
     queryset = Test.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class TestAPIView(APIView):
     """ Отвечает за ввод ответа на тест и показ правильного ответа """
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         answer_input = request.POST.get('answer_input')
